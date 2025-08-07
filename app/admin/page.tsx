@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Plus, Edit, Eye, Trash2, Calendar, Clock, Home } from 'lucide-react'
 import Link from "next/link"
-import { getArticles } from '@/lib/articles'
-import { deleteArticle } from '@/app/actions/articles'
+import { mockArticles } from '@/lib/supabase'
 import type { Article } from '@/lib/supabase'
 
 export default function AdminDashboard() {
@@ -15,28 +14,14 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadArticles()
+    // Use mock data directly - no database calls
+    setArticles(mockArticles)
+    setLoading(false)
   }, [])
-
-  const loadArticles = async () => {
-    try {
-      const data = await getArticles()
-      setArticles(data)
-    } catch (error) {
-      console.error('Error loading articles:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this article?')) {
-      const result = await deleteArticle(id)
-      if (result.success) {
-        loadArticles()
-      } else {
-        alert('Failed to delete article')
-      }
+      alert('To delete articles, you need to edit the code file. I can show you how!')
     }
   }
 
@@ -74,83 +59,89 @@ export default function AdminDashboard() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Instructions Card */}
+        <Card className="mb-8 bg-blue-50 border-blue-200">
+          <CardHeader>
+            <CardTitle className="text-blue-900">How to Add Articles</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-blue-800 space-y-2">
+              <p><strong>To add new articles:</strong></p>
+              <ol className="list-decimal list-inside space-y-1 ml-4">
+                <li>Edit the file: <code className="bg-blue-100 px-2 py-1 rounded">lib/supabase.ts</code></li>
+                <li>Find the <code className="bg-blue-100 px-2 py-1 rounded">mockArticles</code> array</li>
+                <li>Add your new article to the array</li>
+                <li>Upload to GitHub and deploy</li>
+              </ol>
+              <p className="mt-4"><strong>Need help?</strong> I can walk you through adding your first article!</p>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Articles Management */}
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <CardTitle>Your Articles</CardTitle>
-              <Link href="/admin/new-article">
-                <Button className="bg-emerald-600 hover:bg-emerald-700">
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Article
-                </Button>
-              </Link>
+              <Badge className="bg-emerald-100 text-emerald-800">
+                {articles.length} Articles
+              </Badge>
             </div>
           </CardHeader>
           <CardContent>
-            {articles.length === 0 ? (
-              <div className="text-center py-12">
-                <p className="text-gray-500 mb-4">No articles yet. Create your first article!</p>
-                <Link href="/admin/new-article">
-                  <Button className="bg-emerald-600 hover:bg-emerald-700">
-                    <Plus className="w-4 h-4 mr-2" />
-                    Create Article
-                  </Button>
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {articles.map((article) => (
-                  <div key={article.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="font-semibold text-gray-900">{article.title}</h3>
-                        <Badge 
-                          variant={article.status === 'published' ? 'default' : 'secondary'}
-                          className={article.status === 'published' ? 'bg-emerald-100 text-emerald-800' : 'bg-orange-100 text-orange-800'}
-                        >
-                          {article.status}
-                        </Badge>
-                      </div>
-                      <p className="text-gray-600 text-sm mb-2">{article.excerpt}</p>
-                      <div className="flex items-center gap-4 text-xs text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <Calendar className="w-3 h-3" />
-                          {new Date(article.created_at).toLocaleDateString()}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {article.read_time}
-                        </span>
-                        <Badge variant="outline" className="text-xs">
-                          {article.category}
-                        </Badge>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 ml-4">
-                      <Link href={`/admin/edit/${article.id}`}>
-                        <Button variant="outline" size="sm">
-                          <Edit className="w-4 h-4" />
-                        </Button>
-                      </Link>
-                      <Link href={`/post/${article.slug}`}>
-                        <Button variant="outline" size="sm">
-                          <Eye className="w-4 h-4" />
-                        </Button>
-                      </Link>
-                      <Button 
-                        variant="outline" 
-                        size="sm" 
-                        className="text-red-600 hover:text-red-700"
-                        onClick={() => handleDelete(article.id)}
+            <div className="space-y-4">
+              {articles.map((article) => (
+                <div key={article.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="font-semibold text-gray-900">{article.title}</h3>
+                      <Badge 
+                        variant={article.status === 'published' ? 'default' : 'secondary'}
+                        className={article.status === 'published' ? 'bg-emerald-100 text-emerald-800' : 'bg-orange-100 text-orange-800'}
                       >
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
+                        {article.status}
+                      </Badge>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-2">{article.excerpt}</p>
+                    <div className="flex items-center gap-4 text-xs text-gray-500">
+                      <span className="flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        {new Date(article.created_at).toLocaleDateString()}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {article.read_time}
+                      </span>
+                      <Badge variant="outline" className="text-xs">
+                        {article.category}
+                      </Badge>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
+                  <div className="flex items-center gap-2 ml-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => alert('To edit articles, you need to edit the code file. I can show you how!')}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </Button>
+                    <Link href={`/post/${article.slug}`}>
+                      <Button variant="outline" size="sm">
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </Link>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="text-red-600 hover:text-red-700"
+                      onClick={() => handleDelete(article.id)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </div>
