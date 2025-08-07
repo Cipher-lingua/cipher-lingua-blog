@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { ArrowLeft, Save, Eye, Upload, ImageIcon } from 'lucide-react'
+import { ArrowLeft, Save, Eye } from 'lucide-react'
 import Link from "next/link"
 import Image from "next/image"
 import { createArticle } from '@/app/actions/articles'
@@ -56,15 +56,6 @@ export default function NewArticle() {
       alert('Failed to save article')
     } finally {
       setSaving(false)
-    }
-  }
-
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      // In a real app, this would upload to a storage service
-      const imageUrl = URL.createObjectURL(file)
-      setArticle({ ...article, featuredImage: imageUrl })
     }
   }
 
@@ -203,48 +194,33 @@ export default function NewArticle() {
                   />
                 </div>
 
-                {/* Featured Image */}
+                {/* Featured Image URL */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Featured Image
+                    Featured Image URL
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    {article.featuredImage ? (
-                      <div className="space-y-4">
-                        <Image
-                          src={article.featuredImage || "/placeholder.svg"}
-                          alt="Featured"
-                          width={300}
-                          height={200}
-                          className="mx-auto rounded-lg shadow-md"
-                        />
-                        <Button
-                          variant="outline"
-                          onClick={() => setArticle({ ...article, featuredImage: '' })}
-                        >
-                          Remove Image
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        <ImageIcon className="w-12 h-12 text-gray-400 mx-auto" />
-                        <div>
-                          <label className="cursor-pointer">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={handleImageUpload}
-                              className="hidden"
-                            />
-                            <Button variant="outline" className="flex items-center gap-2">
-                              <Upload className="w-4 h-4" />
-                              Upload Image
-                            </Button>
-                          </label>
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <input
+                    type="url"
+                    value={article.featuredImage}
+                    onChange={(e) => setArticle({ ...article, featuredImage: e.target.value })}
+                    placeholder="Paste image URL here (e.g., https://example.com/image.jpg)"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+                  />
+                  {article.featuredImage && (
+                    <div className="mt-4">
+                      <p className="text-sm text-gray-600 mb-2">Preview:</p>
+                      <Image
+                        src={article.featuredImage || "/placeholder.svg"}
+                        alt="Featured image preview"
+                        width={300}
+                        height={200}
+                        className="rounded-lg shadow-md"
+                      />
+                    </div>
+                  )}
+                  <p className="text-xs text-gray-500 mt-2">
+                    Tip: Use free images from Unsplash.com or upload to Imgur.com and copy the URL
+                  </p>
                 </div>
 
                 {/* Content */}
