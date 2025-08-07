@@ -137,7 +137,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
               <h4 className="text-xl font-bold">Cipher Lingua</h4>
             </div>
             <a 
-              href="https://linkedin.com/in/yourprofile" 
+              href="https://www.linkedin.com/in/ibrahim-almahboob-b4a334281/"
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"

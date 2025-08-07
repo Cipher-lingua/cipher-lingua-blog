@@ -22,7 +22,7 @@ export default async function HomePage() {
             </div>
             <div className="flex items-center space-x-4">
               <a 
-                href="https://linkedin.com/in/yourprofile" 
+                href="https://www.linkedin.com/in/ibrahim-almahboob-b4a334281/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors"
@@ -131,7 +131,7 @@ export default async function HomePage() {
                 Exploring Saudi language and culture
               </p>
               <a 
-                href="https://linkedin.com/in/yourprofile" 
+                href="https://www.linkedin.com/in/ibrahim-almahboob-b4a334281/"
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
