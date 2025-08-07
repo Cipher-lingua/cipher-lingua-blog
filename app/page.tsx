@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Calendar, Clock, ArrowRight, Linkedin } from 'lucide-react'
 import Image from "next/image"
 import Link from "next/link"
@@ -11,7 +10,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Simple Header */}
+      {/* Simple Header - NO ADMIN BUTTON */}
       <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -23,7 +22,7 @@ export default async function HomePage() {
             </div>
             <div className="flex items-center space-x-4">
               <a 
-                href="https://linkedin.com/in/ibrahim-almahboob-b4a334281" 
+                href="https://linkedin.com/in/yourprofile" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors"
@@ -31,9 +30,6 @@ export default async function HomePage() {
                 <Linkedin className="w-5 h-5" />
                 <span className="hidden sm:inline">LinkedIn</span>
               </a>
-              <Link href="/admin" className="text-gray-400 hover:text-emerald-600 transition-colors text-sm">
-                Admin
-              </Link>
             </div>
           </div>
         </div>
@@ -107,9 +103,9 @@ export default async function HomePage() {
                         {article.read_time}
                       </span>
                       <Link href={`/post/${article.slug}`}>
-                        <Button variant="ghost" size="sm" className="text-emerald-600 hover:text-emerald-700 p-0">
+                        <button className="text-emerald-600 hover:text-emerald-700 text-sm font-medium">
                           Read more →
-                        </Button>
+                        </button>
                       </Link>
                     </div>
                   </CardContent>
@@ -135,7 +131,7 @@ export default async function HomePage() {
                 Exploring Saudi language and culture
               </p>
               <a 
-                href="https://linkedin.com/in/ibrahim-almahboob-b4a334281" 
+                href="https://linkedin.com/in/yourprofile" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-400 hover:text-white transition-colors"
